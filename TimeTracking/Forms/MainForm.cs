@@ -1,6 +1,7 @@
 using TimeTracking.Data;
 using TimeTracking.Models;
 using TimeTracking.Forms;
+using System.Drawing;
 
 namespace TimeTracking.Forms
 {
@@ -19,6 +20,35 @@ namespace TimeTracking.Forms
         private void MainForm_Load(object sender, EventArgs e)
         {
             labelMonth.Text = _currentMonth.ToString("MMMM/yyyy");
+
+            // Carregar o logo como ícone da janela
+            try
+            {
+                var possiblePaths = new[]
+                {
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "img", "logo.png"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "img", "logo.png"),
+                    Path.Combine(Directory.GetCurrentDirectory(), "img", "logo.png"),
+                    @"C:\Users\higor\source\timetracking\TimeTracking\img\logo.png"
+                };
+
+                foreach (var path in possiblePaths)
+                {
+                    if (File.Exists(path))
+                    {
+                        using (var image = new Bitmap(path))
+                        {
+                            this.Icon = Icon.FromHandle(image.GetHicon());
+                        }
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                // Se não conseguir carregar, continua sem ícone
+            }
+
             LoadProjects();
         }
 
